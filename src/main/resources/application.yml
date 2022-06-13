@@ -1,0 +1,27 @@
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-ui
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        ddl-auto: update
+
+shortener:
+  app:
+    host: http://localhost:8081
+    jwtSecret: generateNewSecret
+    jwtExpirationMs: 3600000
+    jwtRefreshExpirationMs: 86400000
+  allowed-cors:
+    '[/]': GET
+  request-response-logging:
+    include-patterns: /api/v1/checkouts, /api/v1/callbacks/**
