@@ -50,7 +50,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new AuthenticationInterceptor(jwtUserService()))
                 .addPathPatterns("/api/v1/users/**")
                 .excludePathPatterns("/api/v1/users/login")
-                .excludePathPatterns("/api/v1/users/create");
+                .excludePathPatterns("/api/v1/users/register");
     }
 
     @Bean
