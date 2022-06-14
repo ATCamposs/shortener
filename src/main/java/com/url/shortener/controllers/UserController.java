@@ -8,10 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,6 +27,12 @@ public class UserController {
     @PostMapping(value = "/register")
     public ResponseEntity<UserDto> create(@RequestBody UserRegisterRequest request) {
         return userService.createByRequest(request).map(userDto -> ResponseEntity.status(HttpStatus.CREATED).body(userDto))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+    }
+
+    @GetMapping(value = "/me")
+    public ResponseEntity<UserDto> create(@RequestAttribute UUID userId) {
+        return userService.findById(userId).map(userDto -> ResponseEntity.ok().body(userDto))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 }

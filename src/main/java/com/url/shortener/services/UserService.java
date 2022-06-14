@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +22,15 @@ public class UserService {
 
     public Page<User> findAll(Pageable pageRequest) {
         return userRepository.findAll(pageRequest);
+    }
+
+    public Optional<UserDto> findById(UUID id) {
+        var allUsers = userRepository.findAll().get(0);
+        var user = userRepository.findById(id);
+        if (user.isPresent()) {
+            return Optional.of(UserDto.MAPPER.toUserDto(user.get(), null));
+        }
+        return Optional.empty();
     }
 
     public Optional<UserDto> authenticate(LoginRequest loginRequest) {
@@ -37,8 +47,7 @@ public class UserService {
 
         userRegisterRequest.password = passwordService.hash(userRegisterRequest.password);
         var newUser = UserRegisterRequest.MAPPER.toModel(userRegisterRequest);
-        var user = userRepository.save(newUser);
-        var jwtToken = jwtService.jwtFor(user);
-        return Optional.of(UserDto.MAPPER.toUserDto(user, jwtToken));
+        var user = userRepository.saveAndFlush(newUser);
+        return Optional.of(UserDto.MAPPER.toUserDto(user, null));
     }
 }

@@ -6,6 +6,8 @@ import com.url.shortener.repositories.base.AuthenticableRepository;
 import java.util.Optional;
 
 public interface UserRepository extends AuthenticableRepository<User> {
+    //Optional<User> findById(UUID id);
+
     Optional<User> findByEmail(String email);
 
     Boolean existsByEmail(String email);

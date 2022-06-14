@@ -15,7 +15,6 @@ public class JWTService<T extends Authenticable> {
     public static final long EXPIRATION_TIME = 900_000;
     private static final String SECRET = "796";
     public static final Algorithm ALGORITHM = Algorithm.HMAC512(SECRET.getBytes());
-
     private final AuthenticableRepository<T> authenticableRepository;
 
     public Result jwtFor(T authenticable) {
@@ -25,7 +24,6 @@ public class JWTService<T extends Authenticable> {
                 .sign(ALGORITHM);
 
         authenticable.setRefreshToken(UUID.randomUUID());
-        authenticableRepository.save(authenticable);
 
         return new Result(token, authenticable.getRefreshToken().toString());
     }
